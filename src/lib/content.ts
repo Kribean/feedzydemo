@@ -24,7 +24,7 @@ Laissez-nous un avis en 30 secondes via ce lien :`;
 
 // Ce que le client « dit » au micro (affiché comme transcription en direct).
 export const RAW_TRANSCRIPT =
-  "Alors… bah franchement j'ai trouvé ça super. Ils sont venus faire le ménage de mon appart après mon déménagement, euh, ils étaient pile à l'heure, super sympas, et c'était vraiment nickel partout, même les vitres. Et en plus le prix était correct. Je recommande à cent pour cent !";
+  "Franchement, super ! Ils ont fait le ménage après mon déménagement, pile à l'heure, nickel partout, même les vitres. Et le prix était correct. Je recommande à cent pour cent !";
 
 // L'avis rédigé par « l'IA ».
 export const GENERATED_REVIEW = `Excellent service du début à la fin ! L'équipe ${BUSINESS.name} est intervenue pour le nettoyage de mon appartement après mon déménagement : ponctuelle, très sympathique et d'un grand professionnalisme.
