@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Feedzy — Démo commerciale
 
-## Getting Started
+Démo 100 % simulée, à présenter sur téléphone, du parcours client Feedzy :
 
-First, run the development server:
+1. **WhatsApp** : CleanEasy envoie le message avec le lien d'avis.
+2. **App Feedzy** : le client appuie sur le micro et sa transcription s'affiche en direct.
+3. **L'IA rédige l'avis** : l'avis peut être modifié avant publication.
+4. **Publication** sur une fiche Google et une page Trustpilot simulées (note et texte collés automatiquement).
+
+Rien n'est réellement enregistré ni publié. Le micro n'est pas utilisé.
+
+## Lancer
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run build
+npx next start -H 0.0.0.0 -p 3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrez ensuite `http://<IP-du-PC>:3000` sur le téléphone (même Wi-Fi).
+Pour un vrai plein écran, ajoutez la page à l'écran d'accueil (Safari : Partager → « Sur l'écran d'accueil »).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Modifier les textes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Tous les textes (nom de l'établissement, message WhatsApp, transcription, avis généré, avis existants)
+sont dans `src/lib/content.ts`.
