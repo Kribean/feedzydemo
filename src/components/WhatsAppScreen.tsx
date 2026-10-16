@@ -28,7 +28,7 @@ export function WhatsAppScreen({ onOpenLink }: { onOpenLink: () => void }) {
         <div className="flex items-center gap-2 px-2 pb-2.5">
           <BackIcon className="w-6 h-6 shrink-0" />
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4fc3f7] to-[#1565c0] grid place-items-center text-[13px] font-bold shrink-0">
-            CE
+            {BUSINESS.initials}
           </div>
           <div className="flex-1 min-w-0 leading-tight pl-1">
             <div className="flex items-center gap-1 text-[17px] font-medium">

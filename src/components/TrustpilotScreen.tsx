@@ -76,7 +76,7 @@ export function TrustpilotScreen({ review, alreadyPublished, otherPublished, onP
         <div className="bg-white px-4 pt-5 pb-5 border-b border-[#e5e5dd]">
           <div className="flex gap-4 items-center">
             <div className="w-20 h-20 rounded-lg border border-[#e5e5dd] bg-gradient-to-br from-[#4fc3f7] to-[#1565c0] grid place-items-center text-white text-[22px] font-bold shrink-0">
-              CE
+              {BUSINESS.initials}
             </div>
             <div className="min-w-0">
               <h1 className="text-[22px] font-bold text-[#191919] leading-tight">{BUSINESS.name}</h1>
@@ -125,7 +125,7 @@ export function TrustpilotScreen({ review, alreadyPublished, otherPublished, onP
           <div className="sheet-up bg-white rounded-t-2xl max-h-[92%] flex flex-col">
             <div className="flex items-center gap-3 px-4 pt-4 pb-3 border-b border-[#e5e5dd]">
               <div className="w-9 h-9 rounded-md bg-gradient-to-br from-[#4fc3f7] to-[#1565c0] grid place-items-center text-white text-[12px] font-bold">
-                CE
+                {BUSINESS.initials}
               </div>
               <div className="flex-1 leading-tight">
                 <div className="text-[15px] font-bold text-[#191919]">{BUSINESS.name}</div>

@@ -1,11 +1,12 @@
 // Tous les textes de la démo sont centralisés ici pour pouvoir les ajuster facilement.
 
 export const BUSINESS = {
-  name: "CleanEasy",
+  name: "Marathon de Paris",
+  initials: "MP",
   tagline: "NETTOYAGE PROFESSIONNEL",
   category: "Service de nettoyage",
   address: "Paris 11e",
-  website: "cleaneasy.fr",
+  website: "marathondeparis.fr",
 };
 
 export const CUSTOMER = {
@@ -14,7 +15,7 @@ export const CUSTOMER = {
   initials: "MD",
 };
 
-export const REVIEW_LINK = "https://feedzy-hub.com/r/cleaneasy";
+export const REVIEW_LINK = "https://feedzy-hub.com/r/marathon-de-paris";
 
 export const WHATSAPP_MESSAGE = `Bonjour ${CUSTOMER.firstName} 👋
 

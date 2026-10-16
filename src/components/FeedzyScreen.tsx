@@ -68,9 +68,9 @@ function Brand() {
   return (
     <div className="text-center pt-6">
       <div className="text-[30px] font-semibold tracking-[0.12em] text-white leading-none">
-        clean
+        marathon{" "}
         <span className="relative inline-block bg-gradient-to-b from-[#6fe0ff] to-[#a78bfa] bg-clip-text text-transparent">
-          easy
+          paris
           <span className="absolute -top-1.5 -right-3 text-[14px] text-[#6fe0ff]">✦</span>
         </span>
       </div>
