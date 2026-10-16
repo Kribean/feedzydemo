@@ -138,12 +138,16 @@ function RecordView({
 }) {
   const [seconds, setSeconds] = useState(0);
   const [wordCount, setWordCount] = useState(0);
+  // Réponse affichée une fois la transcription terminée ; modifiable par l'utilisateur.
+  const [answer, setAnswer] = useState(QUESTIONS[question].answer);
+  const [editing, setEditing] = useState(false);
   const transcriptRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const words = QUESTIONS[question].answer.split(" ");
   const isLast = question === QUESTIONS.length - 1;
 
   useEffect(() => {
-    if (!recording) return;
+    if (!recording || editing) return;
     const total = QUESTIONS[question].answer.split(" ").length;
     const timer = setInterval(() => setSeconds((s) => s + 1), 1000);
     const typing = setInterval(() => setWordCount((c) => Math.min(c + 1, total)), 230);
@@ -151,11 +155,18 @@ function RecordView({
       clearInterval(timer);
       clearInterval(typing);
     };
-  }, [recording, question]);
+  }, [recording, editing, question]);
 
   useEffect(() => {
     transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: "smooth" });
   }, [wordCount]);
+
+  useEffect(() => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = `${ta.scrollHeight}px`;
+  }, [answer, editing]);
 
   const done = wordCount >= words.length;
   const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
@@ -231,24 +242,54 @@ function RecordView({
       <div className="relative -mt-14 px-4">
         {recording ? (
           <div className="bg-white rounded-[28px] shadow-[0_10px_40px_-10px_rgba(30,30,90,0.25)] p-5 fade-up">
-            <div className="flex items-center gap-2 text-[13px] font-semibold text-[#e5395f]">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#e5395f] animate-pulse" />
-              Transcription en direct
-            </div>
-            <div ref={transcriptRef} className="mt-3 max-h-40 overflow-y-auto no-scrollbar text-[16px] leading-relaxed text-[#1b1b3a]">
-              {wordCount === 0 ? (
-                <span className="text-neutral-400 caret">Parlez maintenant</span>
-              ) : (
-                <span className={done ? "" : "caret"}>{words.slice(0, wordCount).join(" ")}</span>
-              )}
-            </div>
+            {done ? (
+              <div className="flex items-center gap-2 text-[13px] font-semibold text-[#22c08a]">
+                <CheckIcon className="w-4 h-4" />
+                {editing ? "Modifiez votre réponse" : "Transcription terminée"}
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-[13px] font-semibold text-[#e5395f]">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#e5395f] animate-pulse" />
+                Transcription en direct
+              </div>
+            )}
+            {editing ? (
+              <div className="mt-3 rounded-2xl bg-[#f2f3f9] p-3 ring-2 ring-[#6d7cff]">
+                <textarea
+                  ref={textareaRef}
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  className="w-full bg-transparent resize-none outline-none text-[16px] leading-relaxed text-[#1b1b3a]"
+                  autoFocus
+                />
+              </div>
+            ) : (
+              <div ref={transcriptRef} className="mt-3 max-h-40 overflow-y-auto no-scrollbar text-[16px] leading-relaxed text-[#1b1b3a]">
+                {wordCount === 0 ? (
+                  <span className="text-neutral-400 caret">Parlez maintenant</span>
+                ) : done ? (
+                  <span className="whitespace-pre-line">{answer}</span>
+                ) : (
+                  <span className="caret">{words.slice(0, wordCount).join(" ")}</span>
+                )}
+              </div>
+            )}
             {done && (
-              <button
-                onClick={onStop}
-                className="mt-4 w-full rounded-2xl bg-gradient-to-r from-[#5b6cf9] to-[#8b5cf6] text-white font-semibold py-3.5 fade-up active:scale-[0.98] transition-transform"
-              >
-                {isLast ? "Terminer et générer mon avis ✨" : "Question suivante →"}
-              </button>
+              <>
+                <button
+                  onClick={() => setEditing((e) => !e)}
+                  className="mt-3 flex items-center gap-1.5 text-[14px] font-medium text-[#4f5bea] active:opacity-60 fade-up"
+                >
+                  {editing ? <CheckIcon className="w-4 h-4" /> : <PencilIcon className="w-4 h-4" />}
+                  {editing ? "Valider mes modifications" : "Modifier ma réponse"}
+                </button>
+                <button
+                  onClick={onStop}
+                  className="mt-4 w-full rounded-2xl bg-gradient-to-r from-[#5b6cf9] to-[#8b5cf6] text-white font-semibold py-3.5 fade-up active:scale-[0.98] transition-transform"
+                >
+                  {isLast ? "Terminer et générer mon avis ✨" : "Question suivante →"}
+                </button>
+              </>
             )}
           </div>
         ) : (
