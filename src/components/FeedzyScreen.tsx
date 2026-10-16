@@ -43,7 +43,7 @@ export function FeedzyScreen({ review, onReviewChange, published, onClose, onPub
     <div className="absolute inset-0 flex flex-col bg-[#eceef5] screen-in">
       <BrowserBar title={`${BUSINESS.name} — Votre avis`} domain="feedzy-hub.com" onClose={onClose} dark />
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar drag-scroll">
         {phase === "idle" || phase === "recording" ? (
           <RecordView recording={phase === "recording"} onStart={() => setPhase("recording")} onStop={() => setPhase("processing")} />
         ) : phase === "processing" ? (
@@ -218,7 +218,7 @@ function RecordView({ recording, onStart, onStop }: { recording: boolean; onStar
               <span className="w-2.5 h-2.5 rounded-full bg-[#e5395f] animate-pulse" />
               Transcription en direct
             </div>
-            <div ref={transcriptRef} className="mt-3 max-h-40 overflow-y-auto no-scrollbar text-[16px] leading-relaxed text-[#1b1b3a]">
+            <div ref={transcriptRef} className="mt-3 max-h-40 overflow-y-auto no-scrollbar drag-scroll text-[16px] leading-relaxed text-[#1b1b3a]">
               {wordCount === 0 ? (
                 <span className="text-neutral-400 caret">Parlez maintenant</span>
               ) : (

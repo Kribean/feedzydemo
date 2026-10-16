@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { GENERATED_REVIEW } from "@/lib/content";
+import { useDragScroll } from "@/lib/useDragScroll";
 import { WhatsAppScreen } from "./WhatsAppScreen";
 import { FeedzyScreen } from "./FeedzyScreen";
 import { GoogleScreen } from "./GoogleScreen";
@@ -16,6 +17,7 @@ export function Demo() {
   const [published, setPublished] = useState<Platform[]>([]);
   // Incrémenté à chaque redémarrage pour remettre tous les écrans à zéro.
   const [run, setRun] = useState(0);
+  useDragScroll();
 
   const restart = () => {
     setReview(GENERATED_REVIEW);

@@ -33,6 +33,21 @@ body {
   scrollbar-width: none;
 }
 
+/* Défilement à la souris (voir useDragScroll) : main ouverte au survol, fermée pendant le glissé. */
+@media (pointer: fine) {
+  .drag-scroll {
+    cursor: grab;
+  }
+  .drag-scroll :is(textarea, input) {
+    cursor: text;
+  }
+}
+html.drag-scrolling,
+html.drag-scrolling * {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
 /* ---------- Écrans ---------- */
 @keyframes screen-in {
   from {

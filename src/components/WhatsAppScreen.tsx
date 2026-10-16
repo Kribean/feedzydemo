@@ -53,7 +53,7 @@ export function WhatsAppScreen({ onOpenLink }: { onOpenLink: () => void }) {
       </header>
 
       {/* Conversation */}
-      <div className="flex-1 overflow-y-auto wa-bg px-3 py-3 flex flex-col gap-2 no-scrollbar">
+      <div className="flex-1 overflow-y-auto wa-bg px-3 py-3 flex flex-col gap-2 no-scrollbar drag-scroll">
         <div className="self-center bg-white/90 text-[#54656f] text-[12px] px-3 py-1 rounded-lg shadow-sm">Aujourd&apos;hui</div>
         <div className="self-center max-w-[88%] bg-[#ffeecd] text-[#54656f] text-[11.5px] text-center px-3 py-1.5 rounded-lg shadow-sm leading-snug">
           🔒 Les messages et les appels sont chiffrés de bout en bout. Cette entreprise utilise un service sécurisé de Meta pour gérer cette discussion.

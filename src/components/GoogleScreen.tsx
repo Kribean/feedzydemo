@@ -59,7 +59,7 @@ export function GoogleScreen({ review, alreadyPublished, otherPublished, onPubli
     <div className="absolute inset-0 flex flex-col bg-white font-google screen-in">
       <BrowserBar title={`${BUSINESS.name} – Google Maps`} domain="google.com/maps" onClose={onClose} />
 
-      <div className={`flex-1 overflow-y-auto no-scrollbar ${done ? "pb-28" : ""}`}>
+      <div className={`flex-1 overflow-y-auto no-scrollbar drag-scroll ${done ? "pb-28" : ""}`}>
         {/* Photos */}
         <div className="grid grid-cols-[2fr_1fr] gap-0.5 h-44">
           <div className="bg-gradient-to-br from-[#4fc3f7] via-[#29b6f6] to-[#0277bd] grid place-items-center text-6xl">🧽</div>
@@ -163,7 +163,7 @@ export function GoogleScreen({ review, alreadyPublished, otherPublished, onPubli
               <div className="flex-1 text-[18px] text-[#1f1f1f]">{BUSINESS.name}</div>
             </div>
 
-            <div className="flex-1 overflow-y-auto no-scrollbar px-5 pb-4">
+            <div className="flex-1 overflow-y-auto no-scrollbar drag-scroll px-5 pb-4">
               <div className="flex items-center gap-3 mt-2">
                 <div className="w-10 h-10 rounded-full bg-[#1a73e8] text-white grid place-items-center text-[16px] font-medium">
                   {CUSTOMER.initials[0]}

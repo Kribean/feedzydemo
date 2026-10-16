@@ -63,7 +63,7 @@ export function TrustpilotScreen({ review, alreadyPublished, otherPublished, onP
     <div className="absolute inset-0 flex flex-col bg-[#fcfbf3] font-tp screen-in">
       <BrowserBar title={`Avis sur ${BUSINESS.name} | Trustpilot`} domain="fr.trustpilot.com" onClose={onClose} />
 
-      <div className={`flex-1 overflow-y-auto no-scrollbar ${done ? "pb-28" : ""}`}>
+      <div className={`flex-1 overflow-y-auto no-scrollbar drag-scroll ${done ? "pb-28" : ""}`}>
         {/* Bandeau Trustpilot */}
         <div className="bg-[#191919] px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-1.5 text-white text-[20px] font-bold tracking-tight">
@@ -136,7 +136,7 @@ export function TrustpilotScreen({ review, alreadyPublished, otherPublished, onP
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto no-scrollbar px-4 py-4">
+            <div className="flex-1 overflow-y-auto no-scrollbar drag-scroll px-4 py-4">
               <div className="text-[16px] font-bold text-[#191919]">Notez votre expérience récente</div>
               <div className="mt-3">
                 <TpStars value={stars} size="w-11 h-11" animated />
