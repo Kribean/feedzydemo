@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BUSINESS, REVIEW_LINK, WHATSAPP_MESSAGE } from "@/lib/content";
+import { BUSINESS, REVIEW_LINK_LABEL, WHATSAPP_MESSAGE } from "@/lib/content";
 import { BackIcon, DotsIcon, MicIcon } from "./icons";
 
 function nowHHMM() {
@@ -90,9 +90,10 @@ export function WhatsAppScreen({ onOpenLink }: { onOpenLink: () => void }) {
             </button>
 
             <div className="px-1.5 pt-1.5 pb-0.5 text-[15px] text-[#111b21] leading-[1.35] whitespace-pre-line">
-              {WHATSAPP_MESSAGE}{" "}
-              <button onClick={onOpenLink} className="text-[#027eb5] underline underline-offset-2 break-all text-left">
-                {REVIEW_LINK}
+              {WHATSAPP_MESSAGE}
+              <br />
+              <button onClick={onOpenLink} className="text-[#027eb5] font-medium underline underline-offset-2 text-left">
+                {REVIEW_LINK_LABEL}
               </button>
             </div>
             <div className="text-right text-[11px] text-[#667781] px-1.5 -mt-0.5">{time}</div>

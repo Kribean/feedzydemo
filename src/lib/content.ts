@@ -15,13 +15,14 @@ export const CUSTOMER = {
   initials: "MD",
 };
 
-export const REVIEW_LINK = "https://feedzy-hub.com/r/marathon-de-paris";
+// Texte du lien cliquable affiché à la fin du message WhatsApp (à la place de l'URL brute).
+export const REVIEW_LINK_LABEL = "Laisser mon avis";
 
 export const WHATSAPP_MESSAGE = `Bonjour ${CUSTOMER.firstName} 👋
 
-Merci d'être passée chez ${BUSINESS.name} ! Pour continuer à renforcer la qualité de nos services, nous avons besoin de vous 🙏
+Bravo pour votre participation au ${BUSINESS.name} ! 🏅
 
-Laissez-nous un avis en 30 secondes via ce lien :`;
+Racontez-nous votre course en 30 secondes :`;
 
 // Ce que le client « dit » au micro (affiché comme transcription en direct).
 export const RAW_TRANSCRIPT =
