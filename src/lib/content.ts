@@ -17,7 +17,7 @@ export const WHATSAPP_MESSAGE = `Bonjour ${CUSTOMER.firstName} 👋
 
 Bravo pour votre participation au ${BUSINESS.name} ! 🏅
 
-Racontez-nous votre course en 30 secondes :`;
+Racontez-nous votre course en 30 secondes:`;
 
 // Questions posées au participant, dans l'ordre. `answer` est ce qu'il « dit » au micro
 // (affiché comme transcription en direct).
