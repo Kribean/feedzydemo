@@ -1,43 +1,39 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BUSINESS, RAW_TRANSCRIPT } from "@/lib/content";
-import type { Platform } from "./Demo";
+import { BUSINESS, QUESTIONS } from "@/lib/content";
 import { BrowserBar } from "./BrowserBar";
-import {
-  CheckIcon,
-  DocIcon,
-  GoogleG,
-  MicIcon,
-  PencilIcon,
-  RestartIcon,
-  ShieldIcon,
-  Star,
-  TrustpilotStar,
-  WandIcon,
-} from "./icons";
+import { CheckIcon, DocIcon, MicIcon, PencilIcon, RestartIcon, ShieldIcon, Star, WandIcon } from "./icons";
 
 type Phase = "idle" | "recording" | "processing" | "ready";
 
 type Props = {
   review: string;
   onReviewChange: (text: string) => void;
-  published: Platform[];
   onClose: () => void;
-  onPublish: (p: Platform) => void;
   onRestart: () => void;
 };
 
-const WORDS = RAW_TRANSCRIPT.split(" ");
-const PROCESS_STEPS = ["Transcription de votre message", "Correction et mise en forme", "Rédaction de votre avis"];
+const PROCESS_STEPS = ["Transcription de vos réponses", "Correction et mise en forme", "Rédaction de votre avis"];
 
-export function FeedzyScreen({ review, onReviewChange, published, onClose, onPublish, onRestart }: Props) {
+export function FeedzyScreen({ review, onReviewChange, onClose, onRestart }: Props) {
   const [phase, setPhase] = useState<Phase>("idle");
+  const [question, setQuestion] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 });
-  }, [phase]);
+  }, [phase, question]);
+
+  // Passe à la question suivante, ou lance la rédaction de l'avis après la dernière.
+  const nextQuestion = () => {
+    if (question < QUESTIONS.length - 1) {
+      setQuestion((q) => q + 1);
+      setPhase("idle");
+    } else {
+      setPhase("processing");
+    }
+  };
 
   return (
     <div className="absolute inset-0 flex flex-col bg-[#eceef5] screen-in">
@@ -45,17 +41,17 @@ export function FeedzyScreen({ review, onReviewChange, published, onClose, onPub
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar">
         {phase === "idle" || phase === "recording" ? (
-          <RecordView recording={phase === "recording"} onStart={() => setPhase("recording")} onStop={() => setPhase("processing")} />
+          <RecordView
+            key={question}
+            question={question}
+            recording={phase === "recording"}
+            onStart={() => setPhase("recording")}
+            onStop={nextQuestion}
+          />
         ) : phase === "processing" ? (
           <ProcessingView onDone={() => setPhase("ready")} />
         ) : (
-          <ReadyView
-            review={review}
-            onReviewChange={onReviewChange}
-            published={published}
-            onPublish={onPublish}
-            onRestart={onRestart}
-          />
+          <ReadyView review={review} onReviewChange={onReviewChange} onRestart={onRestart} />
         )}
       </div>
     </div>
@@ -108,47 +104,68 @@ function PoweredBy() {
 
 /* ------------------------------------------------------------------ */
 
-function RecordView({ recording, onStart, onStop }: { recording: boolean; onStart: () => void; onStop: () => void }) {
+function QuestionStatus({ current, total }: { current: number; total: number }) {
+  const last = current === total - 1;
+  return (
+    <div className="mt-6 flex flex-col items-center gap-2.5">
+      <div className="rounded-full bg-white/10 border border-white/15 px-3.5 py-1 text-[12px] font-semibold tracking-wide text-white/90">
+        {last ? "Dernière question" : `Question ${current + 1}`} · {current + 1}/{total}
+      </div>
+      <div className="flex gap-1.5">
+        {Array.from({ length: total }).map((_, i) => (
+          <span
+            key={i}
+            className={`h-1.5 rounded-full transition-all duration-500 ${
+              i < current ? "w-6 bg-[#7fe3ff]" : i === current ? "w-10 bg-white" : "w-6 bg-white/25"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RecordView({
+  question,
+  recording,
+  onStart,
+  onStop,
+}: {
+  question: number;
+  recording: boolean;
+  onStart: () => void;
+  onStop: () => void;
+}) {
   const [seconds, setSeconds] = useState(0);
   const [wordCount, setWordCount] = useState(0);
   const transcriptRef = useRef<HTMLDivElement>(null);
+  const words = QUESTIONS[question].answer.split(" ");
+  const isLast = question === QUESTIONS.length - 1;
 
   useEffect(() => {
     if (!recording) return;
+    const total = QUESTIONS[question].answer.split(" ").length;
     const timer = setInterval(() => setSeconds((s) => s + 1), 1000);
-    const words = setInterval(() => setWordCount((c) => Math.min(c + 1, WORDS.length)), 230);
+    const typing = setInterval(() => setWordCount((c) => Math.min(c + 1, total)), 230);
     return () => {
       clearInterval(timer);
-      clearInterval(words);
+      clearInterval(typing);
     };
-  }, [recording]);
+  }, [recording, question]);
 
   useEffect(() => {
     transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: "smooth" });
   }, [wordCount]);
 
-  const done = wordCount >= WORDS.length;
+  const done = wordCount >= words.length;
   const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
   const ss = String(seconds % 60).padStart(2, "0");
 
   return (
     <>
       <Hero tall>
-        <h1 className="mt-7 text-center text-[32px] leading-[1.15] font-bold text-white">
-          {recording ? (
-            <>
-              Je vous écoute…
-              <br />
-              <GradientText>prenez votre temps</GradientText>
-            </>
-          ) : (
-            <>
-              Parlez-nous de
-              <br />
-              <GradientText>votre expérience</GradientText>
-            </>
-          )}
-        </h1>
+        <QuestionStatus current={question} total={QUESTIONS.length} />
+        <h1 className="mt-4 text-center text-[22px] leading-[1.3] font-bold text-white fade-up">{QUESTIONS[question].text}</h1>
 
         <div className="relative mx-auto mt-8 w-[min(64vw,250px)] aspect-square">
           {/* Halo */}
@@ -222,7 +239,7 @@ function RecordView({ recording, onStart, onStop }: { recording: boolean; onStar
               {wordCount === 0 ? (
                 <span className="text-neutral-400 caret">Parlez maintenant</span>
               ) : (
-                <span className={done ? "" : "caret"}>{WORDS.slice(0, wordCount).join(" ")}</span>
+                <span className={done ? "" : "caret"}>{words.slice(0, wordCount).join(" ")}</span>
               )}
             </div>
             {done && (
@@ -230,7 +247,7 @@ function RecordView({ recording, onStart, onStop }: { recording: boolean; onStar
                 onClick={onStop}
                 className="mt-4 w-full rounded-2xl bg-gradient-to-r from-[#5b6cf9] to-[#8b5cf6] text-white font-semibold py-3.5 fade-up active:scale-[0.98] transition-transform"
               >
-                Terminer et générer mon avis ✨
+                {isLast ? "Terminer et générer mon avis ✨" : "Question suivante →"}
               </button>
             )}
           </div>
@@ -245,7 +262,7 @@ function RecordView({ recording, onStart, onStop }: { recording: boolean; onStar
             </StepItem>
             <Arrow />
             <StepItem icon={<Star className="w-5 h-5 text-[#f5a623]" />} bg="from-[#fff0c9] to-[#fff8e6]">
-              3. Publiez votre avis en <span className="text-[#3b6cf6]">1 CLIC</span>
+              3. Envoyez votre avis en <span className="text-[#3b6cf6]">1 CLIC</span>
             </StepItem>
           </div>
         )}
@@ -257,21 +274,10 @@ function RecordView({ recording, onStart, onStop }: { recording: boolean; onStar
               Votre voix ne sera <GradientText>jamais publiée.</GradientText>
             </div>
             <div className="text-[13px] text-white/55">
-              <b className="text-white/85">100% sécurisé.</b> Aucun avis publié sans votre validation.
+              <b className="text-white/85">100% sécurisé.</b> Aucun avis envoyé sans votre validation.
             </div>
           </div>
         </div>
-
-        {!recording && (
-          <div className="mt-4 rounded-[24px] bg-white px-5 py-4 flex items-center gap-4 shadow-[0_6px_24px_-12px_rgba(30,30,90,0.25)]">
-            <GoogleG className="w-9 h-9 shrink-0" />
-            <div className="flex-1 leading-snug">
-              <div className="font-semibold text-[16px] text-[#14142b]">Vous préférez écrire ?</div>
-              <div className="text-[13px] text-neutral-500">Rédigez votre avis directement.</div>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-[#f2f4fb] grid place-items-center text-[#3b6cf6] text-lg">→</div>
-          </div>
-        )}
 
         <PoweredBy />
       </div>
@@ -360,17 +366,15 @@ function ProcessingView({ onDone }: { onDone: () => void }) {
 function ReadyView({
   review,
   onReviewChange,
-  published,
-  onPublish,
   onRestart,
 }: {
   review: string;
   onReviewChange: (t: string) => void;
-  published: Platform[];
-  onPublish: (p: Platform) => void;
   onRestart: () => void;
 }) {
   const [editing, setEditing] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -380,9 +384,13 @@ function ReadyView({
     ta.style.height = `${ta.scrollHeight}px`;
   }, [review, editing]);
 
-  const publish = (p: Platform) => {
-    navigator.clipboard?.writeText(review).catch(() => {});
-    onPublish(p);
+  const send = () => {
+    setEditing(false);
+    setSending(true);
+    setTimeout(() => {
+      setSending(false);
+      setSent(true);
+    }, 1000);
   };
 
   return (
@@ -412,7 +420,7 @@ function ReadyView({
             </div>
             <div className="flex-1 leading-tight">
               <div className="font-bold text-[18px] text-[#14142b]">Votre avis est prêt</div>
-              <div className="text-[12.5px] text-neutral-500 mt-1">Publiez-le ou modifiez-le si vous le souhaitez.</div>
+              <div className="text-[12.5px] text-neutral-500 mt-1">Envoyez-le ou modifiez-le si vous le souhaitez.</div>
             </div>
           </div>
 
@@ -430,47 +438,46 @@ function ReadyView({
             )}
           </div>
 
-          <button
-            onClick={() => setEditing((e) => !e)}
-            className="mt-3 flex items-center gap-1.5 text-[14px] font-medium text-[#4f5bea] active:opacity-60"
-          >
-            {editing ? <CheckIcon className="w-4 h-4" /> : <PencilIcon className="w-4 h-4" />}
-            {editing ? "Valider mes modifications" : "Modifier mon avis"}
-          </button>
+          {!sent && (
+            <button
+              onClick={() => setEditing((e) => !e)}
+              disabled={sending}
+              className="mt-3 flex items-center gap-1.5 text-[14px] font-medium text-[#4f5bea] active:opacity-60"
+            >
+              {editing ? <CheckIcon className="w-4 h-4" /> : <PencilIcon className="w-4 h-4" />}
+              {editing ? "Valider mes modifications" : "Modifier mon avis"}
+            </button>
+          )}
         </div>
 
-        <button
-          onClick={() => publish("google")}
-          className="mt-5 w-full rounded-[22px] px-3 py-3.5 flex items-center gap-3 text-white font-bold text-[16px] shadow-[0_12px_30px_-10px_rgba(20,170,110,0.8)] active:scale-[0.98] transition-transform"
-          style={{ background: "linear-gradient(180deg, #34d39a 0%, #14a974 100%)" }}
-        >
-          <span className="w-11 h-11 rounded-full bg-white grid place-items-center shrink-0 shadow">
-            <GoogleG className="w-6 h-6" />
-          </span>
-          <span className="flex-1 text-left">
-            {published.includes("google") ? "✓ Publié sur Google" : "Cliquez ici pour publier sur Google"}
-          </span>
-        </button>
-
-        <button
-          onClick={() => publish("trustpilot")}
-          className="mt-3 w-full rounded-[22px] px-3 py-3.5 flex items-center gap-3 text-white font-bold text-[16px] bg-[#191919] shadow-[0_12px_30px_-12px_rgba(0,0,0,0.7)] active:scale-[0.98] transition-transform"
-        >
-          <span className="w-11 h-11 rounded-full bg-white grid place-items-center shrink-0 shadow">
-            <TrustpilotStar className="w-6 h-6" />
-          </span>
-          <span className="flex-1 text-left">
-            {published.includes("trustpilot") ? "✓ Publié sur Trustpilot" : "Publier aussi sur Trustpilot"}
-          </span>
-        </button>
-
-        <p className="mt-3 text-center text-[13px] text-neutral-500 leading-snug px-2">
-          En cliquant ici, votre avis sera automatiquement copié et collé sur la page choisie.
-        </p>
-
-        {published.length > 0 && (
-          <button onClick={onRestart} className="mx-auto mt-5 flex items-center gap-2 text-[14px] text-neutral-500 active:opacity-60">
-            <RestartIcon className="w-4 h-4" /> Recommencer la démo
+        {sent ? (
+          <>
+            <div className="mt-5 w-full rounded-[22px] px-4 py-4 flex items-center gap-3 bg-white shadow-[0_6px_24px_-12px_rgba(30,30,90,0.25)] fade-up">
+              <span className="w-10 h-10 rounded-full bg-[#22c08a] text-white grid place-items-center shrink-0">
+                <CheckIcon className="w-5 h-5 pop" />
+              </span>
+              <div className="leading-snug">
+                <div className="font-semibold text-[15px] text-[#14142b]">Avis envoyé !</div>
+                <div className="text-[13px] text-neutral-500">Merci, l&apos;équipe du {BUSINESS.name} l&apos;a bien reçu.</div>
+              </div>
+            </div>
+            <button onClick={onRestart} className="mx-auto mt-5 flex items-center gap-2 text-[14px] text-neutral-500 active:opacity-60">
+              <RestartIcon className="w-4 h-4" /> Recommencer la démo
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={send}
+            disabled={sending}
+            className="mt-5 w-full rounded-[22px] py-4 flex items-center justify-center gap-2 text-white font-bold text-[16px] bg-gradient-to-r from-[#5b6cf9] to-[#8b5cf6] shadow-[0_12px_30px_-10px_rgba(91,108,249,0.8)] active:scale-[0.98] transition-transform"
+          >
+            {sending ? (
+              <>
+                <span className="w-4 h-4 rounded-full border-2 border-white/40 border-t-white spin" /> Envoi…
+              </>
+            ) : (
+              "Envoyer mon avis"
+            )}
           </button>
         )}
 

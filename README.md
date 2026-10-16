@@ -2,12 +2,12 @@
 
 Démo 100 % simulée, à présenter sur téléphone, du parcours client Feedzy :
 
-1. **WhatsApp** : CleanEasy envoie le message avec le lien d'avis.
-2. **App Feedzy** : le client appuie sur le micro et sa transcription s'affiche en direct.
-3. **L'IA rédige l'avis** : l'avis peut être modifié avant publication.
-4. **Publication** sur une fiche Google et une page Trustpilot simulées (note et texte collés automatiquement).
+1. **WhatsApp** : le Marathon de Paris envoie le message avec le lien « Laisser mon avis ».
+2. **App Feedzy** : le participant appuie sur le micro et sa transcription s'affiche en direct.
+3. **L'IA rédige l'avis** : l'avis peut être modifié avant envoi.
+4. **Envoi** de l'avis à l'organisateur (confirmation simulée).
 
-Rien n'est réellement enregistré ni publié. Le micro n'est pas utilisé.
+Rien n'est réellement enregistré ni envoyé. Le micro n'est pas utilisé.
 
 ## Lancer
 

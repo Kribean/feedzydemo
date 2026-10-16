@@ -3,16 +3,11 @@
 export const BUSINESS = {
   name: "Marathon de Paris",
   initials: "MP",
-  tagline: "NETTOYAGE PROFESSIONNEL",
-  category: "Service de nettoyage",
-  address: "Paris 11e",
-  website: "marathondeparis.fr",
+  tagline: "COURSE À PIED",
 };
 
 export const CUSTOMER = {
   firstName: "Marie",
-  fullName: "Marie Dupont",
-  initials: "MD",
 };
 
 // Texte du lien cliquable affiché à la fin du message WhatsApp (à la place de l'URL brute).
@@ -24,70 +19,29 @@ Bravo pour votre participation au ${BUSINESS.name} ! 🏅
 
 Racontez-nous votre course en 30 secondes :`;
 
-// Ce que le client « dit » au micro (affiché comme transcription en direct).
-export const RAW_TRANSCRIPT =
-  "Franchement, super ! Ils ont fait le ménage après mon déménagement, pile à l'heure, nickel partout, même les vitres. Et le prix était correct. Je recommande à cent pour cent !";
-
-// L'avis rédigé par « l'IA ».
-export const GENERATED_REVIEW = `Excellent service du début à la fin ! L'équipe ${BUSINESS.name} est intervenue pour le nettoyage de mon appartement après mon déménagement : ponctuelle, très sympathique et d'un grand professionnalisme.
-
-Le résultat est impeccable, tout était parfaitement propre, jusqu'aux vitres. Et le rapport qualité-prix est excellent.
-
-Je recommande ${BUSINESS.name} sans hésitation !`;
-
-export const TRUSTPILOT_TITLE = "Un service impeccable, je recommande !";
-
-export type ExistingReview = {
-  name: string;
-  initials: string;
-  color: string;
-  rating: number;
-  when: string;
-  text: string;
-};
-
-export const GOOGLE_REVIEWS: ExistingReview[] = [
+// Questions posées au participant, dans l'ordre. `answer` est ce qu'il « dit » au micro
+// (affiché comme transcription en direct).
+export const QUESTIONS = [
   {
-    name: "Thomas Lefèvre",
-    initials: "T",
-    color: "#7b1fa2",
-    rating: 5,
-    when: "il y a 2 semaines",
-    text: "Très bonne équipe, réactive et efficace. Bureaux nickel tous les lundis matin.",
+    text: "Quelle animation vous a vraiment donné un coup de boost, au village ou pendant la course, et à quel endroit ou quel kilomètre ?",
+    answer:
+      "Alors au trentième kilomètre, la batucada sous le tunnel, franchement ça m'a reboostée ! Et au village, l'échauffement collectif en musique avant le départ, c'était top.",
   },
   {
-    name: "Sophie Martin",
-    initials: "S",
-    color: "#00897b",
-    rating: 5,
-    when: "il y a 1 mois",
-    text: "Intervention rapide pour une fin de bail, l'état des lieux s'est très bien passé grâce à eux.",
+    text: "Quelle marque présente sur l’événement avez-vous retenue, et avez-vous fait quelque chose avec elle, comme tester un produit ?",
+    answer:
+      "J'ai retenu Hydrafit. J'ai testé leur boisson de récupération à l'arrivée, et au village j'ai fait l'analyse de foulée sur leur stand.",
   },
   {
-    name: "Karim B.",
-    initials: "K",
-    color: "#e64a19",
-    rating: 4,
-    when: "il y a 2 mois",
-    text: "Bon travail, petit retard à l'arrivée mais résultat au top.",
+    text: "Reviendrez-vous l’an prochain ? Et si vous ne pouviez changer qu’une seule chose, ce serait laquelle ?",
+    answer:
+      "Oui, je reviens l'an prochain, c'est sûr ! Si je pouvais changer une seule chose, ce serait plus de points d'eau sur la deuxième moitié du parcours.",
   },
 ];
 
-export const TRUSTPILOT_REVIEWS: ExistingReview[] = [
-  {
-    name: "Julien R.",
-    initials: "JR",
-    color: "#dcdce6",
-    rating: 5,
-    when: "Il y a 5 jours",
-    text: "Personnel souriant et travail minutieux. Je fais appel à eux tous les mois.",
-  },
-  {
-    name: "Claire V.",
-    initials: "CV",
-    color: "#dcdce6",
-    rating: 4,
-    when: "Il y a 3 semaines",
-    text: "Bonne prestation dans l'ensemble, prise de rendez-vous très simple.",
-  },
-];
+// L'avis rédigé par « l'IA » à partir des réponses.
+export const GENERATED_REVIEW = `Une expérience incroyable sur le ${BUSINESS.name} ! Au 30e kilomètre, la batucada sous le tunnel m'a donné un vrai coup de boost, et l'échauffement collectif en musique au village a lancé la journée dans une super ambiance.
+
+Côté partenaires, j'ai retenu Hydrafit : j'ai testé leur boisson de récupération à l'arrivée et fait une analyse de foulée sur leur stand.
+
+Je reviendrai l'an prochain sans hésiter ! Seule suggestion : ajouter quelques points d'eau sur la seconde moitié du parcours.`;

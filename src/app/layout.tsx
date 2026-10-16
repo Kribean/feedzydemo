@@ -10,7 +10,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "Feedzy — Démo",
-  description: "Démo Feedzy : transformez la voix de vos clients en avis Google et Trustpilot.",
+  description: "Démo Feedzy : transformez la voix de vos clients en avis écrits.",
   appleWebApp: {
     capable: true,
     title: "Feedzy Démo",
